@@ -134,4 +134,4 @@ async def on_message(message):
 
     
 
-client.run('aabr@uchicago.edu', 'AatronBorg')
+client.run('USERNAME', 'PASSWORD')
