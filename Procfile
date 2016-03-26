@@ -1,1 +1,1 @@
-web: python aatronDiscord.py
+chatbot: python aatronDiscord.py
