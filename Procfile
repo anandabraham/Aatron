@@ -1,1 +1,1 @@
-chatbot: python aatronDiscord.py
+worker: python aatronDiscord.py
