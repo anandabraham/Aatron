@@ -30,35 +30,7 @@ def nextword2(twople):
     else:
         word = nextword1(twople[1])
     return word
-def addToLexicon(message):
-    words= message.split()
-    lowercasewords = message.lower().split()
-    if 'aatron' not in lowercasewords:
-        for l in range(len(words)- 1):
-            willadd = True
-            for character in ignoredcharacters:
-                if character in words[l] or character in words[l + 1]:
-                    willadd = False
-                    break
-            if willadd:
-                word = words[l]
-                if not word in lexicon1.keys():
-                    lexicon1[word] = []
-                if word[-1] not in ',.?!' and word != 'ENDOFLINE' and word != 'aatron':
-                    lexicon1[word].append(str(words[l + 1]))
-        for l in range(len(words)- 2):
-            willadd = True
-            for character in ignoredcharacters:
-                if character in words[l]+ words[l + 1] + words[l + 2]:
-                    willadd = False
-                    break
-            if willadd:
-                firstword = words[l]
-                secondword = words[l + 1]
-                if not (firstword, secondword) in lexicon2.keys():
-                    lexicon2[(firstword, secondword)] = ['DESCEND2ONE']
-                if firstword != 'ENDOFLINE' and secondword[-1] not in ',.?!' and secondword != 'ENDOFLINE':
-                    lexicon2[(firstword),(secondword)].append(str(words[l + 2]))
+
 def constructResponse(message):
     start = time.time()
     followthis = ('', 'ENDOFLINE')
@@ -105,6 +77,7 @@ async def on_message(message):
         return
     if "!roll" in message.content.lower():
             diceRolled = False
+            start = time.time()
             for die in message.content.split():
                 match = re.match(r'(\d*)d(\d+)(\+(\d+))?', die)
                 if match:
@@ -112,6 +85,10 @@ async def on_message(message):
                     sides = int(match.group(2))
                     total = int(match.group(4)) if match.group(4) else 0
                     for i in range(times):
+                        end = time.time()
+                        if end - start > 0.1
+                            await client.send_message(message.channel, "You broke it you fucking scumbag")
+                            break
                         total += random.randint(1, sides)
                     msg = die + " roll: " + str(total)
                     await client.send_message(message.channel, msg)
