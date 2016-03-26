@@ -86,7 +86,7 @@ async def on_message(message):
                     total = int(match.group(4)) if match.group(4) else 0
                     for i in range(times):
                         end = time.time()
-                        if end - start > 0.1
+                        if end - start > 0.1:
                             await client.send_message(message.channel, "You broke it you fucking scumbag")
                             break
                         total += random.randint(1, sides)
