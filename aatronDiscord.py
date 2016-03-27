@@ -10,6 +10,7 @@ print('lexicon 2 loaded')
 
 client = discord.Client()
 
+#log in
 @client.event
 async def on_ready():
     print('Logged in as')
@@ -68,15 +69,19 @@ def constructResponse(message):
             break
     return response
 
+#prewritten responses
 greetings = ["hi", "hello", "howdy", "sup", "hey"]
-
+dicesnark = ["error: you're a jackass", "that's too many dice you idiot", "no", "yeah, no"]
+wikisnark = ["I am a failure of a robot", "use quotes you jackass", "I'm sorry, sir, what are you trying to do?", "I'm not your slave"]
 @client.event
 async def on_message(message):
     # we do not want the bot to reply to itself
     if message.author == client.user:
         return
+    #dice rolling functionality!
     if "!roll" in message.content.lower():
             diceRolled = False
+            #make sure not to go on forever
             start = time.time()
             for die in message.content.split():
                 match = re.match(r'(\d*)d(\d+)(\+(\d+))?', die)
@@ -87,7 +92,7 @@ async def on_message(message):
                     for i in range(times):
                         end = time.time()
                         if end - start > 0.1:
-                            await client.send_message(message.channel, "You broke it you fucking scumbag")
+                            await client.send_message(message.channel, random.choice(dicesnark))
                             break
                         total += random.randint(1, sides)
                     msg = die + " roll: " + str(total)
@@ -96,14 +101,20 @@ async def on_message(message):
             if diceRolled is False:
                 msg = "roll what?"
                 await client.send_message(message.channel, msg)
+    #wikipedia functionality!
     if "!wiki" in message.content.lower():
         match = re.search(r'"(.*)"', message.content)
         if match:
             wiki = match.groups(1)
-            msg = wikipedia.summary(wiki, sentences = 5)
-            await client.send_message(message.channel, msg)
+            try:
+                msg = wikipedia.summary(wiki, sentences = 5)
+                await client.send_message(message.channel, msg)
+            except wikipedia.exceptions.DisambiguationError:
+                await client.send_message(message.channel, "Be more specific")
+            except wikipedia.exceptions.PageError:
+                await client.send_message(message.channel, "I have no idea what that is")
         else:
-            await client.send_message(message.channel, "I am a failure of a robot")
+            await client.send_message(message.channel, random.choice(wikisnark))
     if client.user in message.mentions:
         for greeting in greetings:
             if greeting in message.content.lower():
