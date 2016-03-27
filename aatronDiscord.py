@@ -1,4 +1,4 @@
-import discord,asyncio,os.path,pickle,time,random,sys,re
+import discord,asyncio,os.path,pickle,time,random,sys,re,wikipedia
 a=open('lexicon1-Aatron','rb')
 lexicon1= pickle.load(a, encoding='latin1')
 a.close()
@@ -96,6 +96,14 @@ async def on_message(message):
             if diceRolled is False:
                 msg = "roll what?"
                 await client.send_message(message.channel, msg)
+    if "!wiki" in message.content.lower():
+        match = re.search(r'"(.*)"', message.content)
+        if match:
+            wiki = match.groups(1)
+            msg = wikipedia.summary(wiki, sentences = 5)
+            await client.send_message(message.channel, msg)
+        else:
+            await client.send_message(message.channel, "I am a failure of a robot")
     if client.user in message.mentions:
         for greeting in greetings:
             if greeting in message.content.lower():
